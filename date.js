@@ -2,18 +2,19 @@ const {DateTime} = require('luxon')
 
 // 基本的时间格式化
 function formatDate (date) {
-  var d = date.getDate();
-  var m = date.getMonth() + 1;
-  var y = date.getFullYear();
+  let d = date.getDate();
+  let m = date.getMonth() + 1;
+  let y = date.getFullYear();
 
-  var h = date.getHours();
-  var minu = date.getMinutes();
-  var s = date.getSeconds();
+  let h = date.getHours();
+  let minu = date.getMinutes();
+  let s = date.getSeconds();
 
   return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d) + " " + (h <= 9 ? '0' + h : h) + ":"
     + (minu <= 9 ? '0' + minu : minu) + ":" + (s <= 9 ? '0' + s : s);
 }
 
+// 给数字加上指定的前导零
 function pad (num, size) {
   var s = num + ''
   while (s.length < size) s = '0' + s
@@ -21,14 +22,14 @@ function pad (num, size) {
 }
 
 // 获取 refDate 所在年的第 weekNo 周的日期范围
-function getWeekRange (refDate, weekNo) {
+function getWeekRange (refDate, weekNumber) {
   let _refDate = new Date(refDate)
   let d = DateTime.fromJSDate(_refDate)
 
   let numOfdaysPastSinceLastMonday = eval(_refDate.getDay() - 1)
   _refDate.setDate(_refDate.getDate() - numOfdaysPastSinceLastMonday)
   let weekNoToday = d.weekNumber
-  let weeksInTheFuture = eval(weekNo - weekNoToday)
+  let weeksInTheFuture = eval(weekNumber - weekNoToday)
   _refDate.setDate(_refDate.getDate() + eval(7 * weeksInTheFuture))
 
   let rangeIsFrom = `${_refDate.getFullYear()}-${eval(pad(_refDate.getMonth() + 1), 2)}-${pad(_refDate.getDate(), 2)}`
@@ -36,11 +37,24 @@ function getWeekRange (refDate, weekNo) {
   _refDate.setDate(_refDate.getDate() + 6)
   let rangeIsTo = `${_refDate.getFullYear()}-${eval(pad(_refDate.getMonth() + 1), 2)}-${pad(_refDate.getDate(), 2)}`
 
-  return rangeIsFrom + " to " + rangeIsTo
+  return {
+    year: _refDate.year,
+    weekNumber: weekNumber,
+    from: rangeIsFrom,
+    to: rangeIsTo
+  }
+}
+
+// 获取 refDate 在一年中的哪一周，以及该周的日期范围
+function getWeekInfo (refDate) {
+  let d = DateTime.fromJSDate(refDate)
+  let weekNumber = d.weekNumber
+  return getWeekRange(refDate, weekNumber)
 }
 
 module.exports = {
   getWeekRange,
+  getWeekInfo,
   formatDate,
   pad
 }
