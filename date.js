@@ -38,7 +38,7 @@ function getWeekRange (refDate, weekNumber) {
   let rangeIsTo = _refDate
 
   return {
-    year: _refDate.year,
+    year: _refDate.getFullYear(),
     weekNumber: weekNumber,
     from: rangeIsFrom,
     to: rangeIsTo
