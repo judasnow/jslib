@@ -32,10 +32,10 @@ function getWeekRange (refDate, weekNumber) {
   let weeksInTheFuture = eval(weekNumber - weekNoToday)
   _refDate.setDate(_refDate.getDate() + eval(7 * weeksInTheFuture))
 
-  let rangeIsFrom = `${_refDate.getFullYear()}-${eval(pad(_refDate.getMonth() + 1), 2)}-${pad(_refDate.getDate(), 2)}`
+  let rangeIsFrom = new Date(_refDate)
 
   _refDate.setDate(_refDate.getDate() + 6)
-  let rangeIsTo = `${_refDate.getFullYear()}-${eval(pad(_refDate.getMonth() + 1), 2)}-${pad(_refDate.getDate(), 2)}`
+  let rangeIsTo = _refDate
 
   return {
     year: _refDate.year,
